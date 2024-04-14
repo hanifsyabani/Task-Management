@@ -1,5 +1,3 @@
-
-
 export interface SideItem {
   name: string;
   path: string;
