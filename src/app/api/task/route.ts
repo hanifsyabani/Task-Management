@@ -25,6 +25,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ task }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Error Creating Task" }, { status: 500 });
+    console.log(error);
+    if (error instanceof Error) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
+    }
   }
 }

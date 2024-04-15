@@ -11,7 +11,7 @@ export default function Home() {
   const[openModal, setOpenModal] = useState(false);
   return (
     <div>
-      <Header title="All Tasks" />
+      <Header title="All Tasks" setModal={setOpenModal}/>
       <div className="flex gap-6 items-center mt-10">
         <Card />
         <AddTaskCard modal={openModal} setModal={setOpenModal}  />
