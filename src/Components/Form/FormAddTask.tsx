@@ -3,9 +3,12 @@
 import { IoMdClose } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { ChangeEvent, useState } from "react";
+import { useToast, Spinner } from "@chakra-ui/react";
 
 export default function FormAddTask({ setModal }: any) {
   const [tasks, setTasks] = useState({});
+  const toast = useToast();
+  const [loading, setLoading] = useState(false);
 
   const handleInput = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -18,6 +21,7 @@ export default function FormAddTask({ setModal }: any) {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch("/api/task", {
         method: "POST",
@@ -27,15 +31,37 @@ export default function FormAddTask({ setModal }: any) {
         body: JSON.stringify(tasks),
       });
       const data = await response.json();
-      if(data.error) throw new Error(data.error);
-      setTasks({});
+      if (response.ok) {
+        toast({
+          title: "Task created.",
+          description: "We've created your task for you.",
+          status: "success",
+          duration: 1000,
+          isClosable: true,
+          position: "top-right",
+          variant: "top-accent",
+        });
+        setTasks({});
+      } else {
+        toast({
+          title: "Task failed to create.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top-right",
+          variant: "top-accent",
+        });
+        throw new Error(data.error);
+      }
+      setLoading(false);
+      setModal(false);
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[35rem] rounded-xl bg-secondary p-4 border">
+    <div className="absolute top-5 w-[70%] h-[35rem] rounded-xl bg-secondary p-4 border">
       <div className="flex justify-between">
         <h1 className="text-white font-semibold text-lg">Create Task</h1>
         <IoMdClose
@@ -110,7 +136,7 @@ export default function FormAddTask({ setModal }: any) {
 
         <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-36 text-white font-semibold mt-5 hover:bg-purple-800 transition-all mx-auto ">
           <FaPlus size={15} className="text-white cursor-pointer" />
-          <button type="submit">Create Task</button>
+          <button type="submit">{loading ? <Spinner /> : "Create Task"}</button>
         </div>
       </form>
     </div>

@@ -8,14 +8,11 @@ import FormAddTask from "@/Components/Form/FormAddTask";
 
 export default function Home() {
 
-  const[openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div>
-      <Header title="All Tasks" setModal={setOpenModal}/>
-      <div className="flex gap-6 items-center mt-10">
-        <Card />
-        <AddTaskCard modal={openModal} setModal={setOpenModal}  />
-      </div>
+      <Header title="All Tasks" setModal={setOpenModal} />
+      <Card modal={openModal} setModal={setOpenModal} />
       {openModal && <FormAddTask setModal={setOpenModal} />}
     </div>
   );
