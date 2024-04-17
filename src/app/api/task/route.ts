@@ -35,7 +35,16 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const task = await prisma.task.findMany();
-    return NextResponse.json({ task }, { status: 200 });
+    const completed = await prisma.task.findMany({
+      where:{
+        isCompleted: true
+      }
+    })
+    const responseData ={
+      task,
+      completed
+    }
+    return NextResponse.json(responseData)
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 500 });

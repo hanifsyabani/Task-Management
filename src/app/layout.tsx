@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/Components/Sidebar/Sidebar";
 import { Providers } from "./provider";
+import NextTopLoader from "nextjs-toploader";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -19,7 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <div className="bg-primary px-2 py-6 w-full lg:flex min-h-screen">
+        <div className="bg-primary px-2 py-6 w-full lg:flex h-full min-h-screen">
+          <NextTopLoader color="#ffffff"/>
           <Sidebar />
           <main className="lg:ml-[20%] bg-tertiary p-4 rounded-xl border border-gray-600 w-full">
             <Providers>{children}</Providers>

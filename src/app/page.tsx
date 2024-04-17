@@ -2,18 +2,44 @@
 
 import Card from "@/Components/Card/Card";
 import Header from "@/Components/Header/Header";
-import AddTaskCard from '@/Components/Card/AddTaskCard'
-import { useState } from "react";
-import FormAddTask from "@/Components/Form/FormAddTask";
+import { useEffect, useState } from "react";
+
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  isCompleted: boolean;
+}
 
 export default function Home() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const [openModal, setOpenModal] = useState(false);
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  async function fetchTasks() {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/task");
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data.task);
+      } else {
+        throw new Error("Failed to fetch tasks");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  }
+
   return (
     <div>
-      <Header title="All Tasks" setModal={setOpenModal} />
-      <Card modal={openModal} setModal={setOpenModal} />
-      {openModal && <FormAddTask setModal={setOpenModal} />}
+      <Header title="All Tasks" />
+      <Card tasks={tasks} loadings ={loading} />
     </div>
   );
 }

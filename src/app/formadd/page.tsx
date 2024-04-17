@@ -1,14 +1,16 @@
-"use client";
+'use client'
 
 import { IoMdClose } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { ChangeEvent, useState } from "react";
 import { useToast, Spinner } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
-export default function FormAddTask({ setModal }: any) {
+export default function FormAdd() {
   const [tasks, setTasks] = useState({});
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleInput = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -41,7 +43,6 @@ export default function FormAddTask({ setModal }: any) {
           position: "top-right",
           variant: "top-accent",
         });
-        setTasks({});
       } else {
         toast({
           title: "Task failed to create.",
@@ -53,21 +54,21 @@ export default function FormAddTask({ setModal }: any) {
         });
         throw new Error(data.error);
       }
+      setTasks({});
       setLoading(false);
-      setModal(false);
+      router.push('/');
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <div className="absolute top-5 w-[70%] h-[35rem] rounded-xl bg-secondary p-4 border">
+    <div className="  p-4 ">
       <div className="flex justify-between">
         <h1 className="text-white font-semibold text-lg">Create Task</h1>
         <IoMdClose
           size={25}
           className="text-red-500 cursor-pointer"
-          onClick={() => setModal(false)}
         />
       </div>
       <form className="mt-7" onSubmit={handleSubmit}>
