@@ -35,16 +35,43 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const task = await prisma.task.findMany();
+
     const completed = await prisma.task.findMany({
-      where:{
-        isCompleted: true
-      }
-    })
-    const responseData ={
+      where: {
+        isCompleted: true,
+      },
+    });
+
+    const doit = await prisma.task.findMany({
+      where: {
+        isCompleted: false,
+      },
+    });
+
+    const important = await prisma.task.findMany({
+      where: {
+        isImportant: true,
+      },
+    });
+
+    const responseData = {
       task,
-      completed
+      completed,
+      doit,
+      important,
+    };
+    return NextResponse.json(responseData);
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
     }
-    return NextResponse.json(responseData)
+  }
+}
+
+export async function DELETE() {
+  try {
+    await prisma.task.deleteMany();
+    return NextResponse.json({ message: "All tasks deleted" }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 500 });

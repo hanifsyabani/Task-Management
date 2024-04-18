@@ -33,6 +33,7 @@ export default function Completed() {
     }
     setLoading(false);
   }
+  
   return (
     <div >
       <Header title="Completed" />
