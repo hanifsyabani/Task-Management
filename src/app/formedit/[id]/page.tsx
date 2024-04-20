@@ -1,16 +1,57 @@
-'use client'
+"use client";
 
+import { Spinner, useToast } from "@chakra-ui/react";
+import { useParams, useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { ChangeEvent, useState } from "react";
-import { useToast, Spinner } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
-export default function FormAdd() {
-  const [tasks, setTasks] = useState({});
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  isCompleted: boolean;
+  isImportant: boolean;
+}
+
+export default function FormEdit() {
+  const [task, setTask] = useState({} as Task);
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const params = useParams();
+
+  useEffect(() => {
+    async function fetchTaskByid() {
+      const taskId = params.id;
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/task/${taskId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setTask(data);
+        } else {
+          toast({
+            title: "Task not found.",
+            description: "Please check your task and try again.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+            position: "top-right",
+            variant: "top-accent",
+          });
+          setLoading(false);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchTaskByid();
+  }, []);
 
   const handleInput = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -18,35 +59,35 @@ export default function FormAdd() {
     const { name, value, type } = e.target;
     const inputValue =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-    setTasks((old) => ({ ...old, [name]: inputValue }));
+    setTask((old) => ({ ...old, [name]: inputValue }));
   };
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    setLoading(true);
+    const taskId = params.id;
     try {
-      const response = await fetch("/api/task", {
-        method: "POST",
+      const res = await fetch(`/api/task/${taskId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(tasks),
+        body: JSON.stringify(task),
       });
-      const data = await response.json();
-      if (response.ok) {
+      if (res.ok) {
         toast({
-          title: "Task created.",
-          description: "We've created your task for you.",
+          title: "Task updated.",
+          description: "We've updated your task for you.",
           status: "success",
           duration: 1000,
           isClosable: true,
           position: "top-right",
           variant: "top-accent",
         });
+        router.push("/");
       } else {
         toast({
-          title: "Task failed to create.",
-          description:"Please check your task and try again.",
+          title: "Task failed to update.",
+          description: "Please check your task and try again.",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -54,11 +95,8 @@ export default function FormAdd() {
           variant: "top-accent",
         });
         setLoading(false);
-        throw new Error(data.error);
+        throw new Error("Failed to update task");
       }
-      setTasks({});
-      setLoading(false);
-      router.push('/');
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +105,7 @@ export default function FormAdd() {
   return (
     <div className="p-4">
       <div className="flex justify-between">
-        <h1 className="text-white font-semibold text-lg">Create Task</h1>
+        <h1 className="text-white font-semibold text-lg">Edit Task</h1>
         <MdOutlineKeyboardBackspace
           size={25}
           className="text-white cursor-pointer"
@@ -87,6 +125,7 @@ export default function FormAdd() {
             name="title"
             id="title"
             placeholder="e.g Buy groceries"
+            value={task?.title || ""}
             onChange={handleInput}
             className="text-sm bg-primary px-2 py-3 rounded-md w-full outline-none text-gray-200"
           />
@@ -101,6 +140,7 @@ export default function FormAdd() {
           <textarea
             name="description"
             id="description"
+            value={task?.description || ""}
             onChange={handleInput}
             placeholder="e.g Buy grocires from the market"
             className="text-sm bg-primary px-2 py-3 rounded-md w-full outline-none text-gray-200 h-24"
@@ -114,6 +154,7 @@ export default function FormAdd() {
             type="date"
             name="date"
             id="date"
+            value={task?.date || ""}
             onChange={handleInput}
             placeholder="e.g Buy groceries"
             className="text-sm bg-primary px-2 py-3 rounded-md w-full outline-none text-gray-200"
@@ -126,6 +167,7 @@ export default function FormAdd() {
             name="completed"
             id="completed"
             onChange={handleInput}
+            value={task?.isCompleted ? "true" : "false"}
           />
         </div>
         <div className="flex justify-between">
@@ -135,12 +177,13 @@ export default function FormAdd() {
             name="important"
             id="important"
             onChange={handleInput}
+            value={task?.isImportant ? "true" : "false"}
           />
         </div>
 
-        <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-36 text-white font-semibold mt-5 hover:bg-purple-800 transition-all mx-auto ">
+        <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-44 text-white font-semibold mt-5 hover:bg-purple-800 transition-all mx-auto ">
           <FaPlus size={15} className="text-white cursor-pointer" />
-          <button type="submit">{loading ? <Spinner /> : "Create Task"}</button>
+          <button type="submit">{loading ? <Spinner /> : "Update Task"}</button>
         </div>
       </form>
     </div>

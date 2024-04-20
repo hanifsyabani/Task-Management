@@ -16,6 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRef } from "react";
+import Link from "next/link";
 
 interface Task {
   id: number;
@@ -40,12 +41,11 @@ export default function Card({
 
   async function deleteById(id: any) {
     try {
-      const response = await fetch(`/api/task/id`, {
+      const response = await fetch(`/api/task/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: id }),
       });
       if (response.ok) {
         toast({
@@ -81,16 +81,16 @@ export default function Card({
   async function updateCompleted(id: any, isCompleted: boolean) {
     const confirm = window.confirm(
       "Are you sure you want to complete this task?"
-    )
-    if(!confirm) return;
-    
+    );
+    if (!confirm) return;
+
     try {
-      const res = await fetch("/api/task/id", {
+      const res = await fetch(`/api/task/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id, isCompleted }),
+        body: JSON.stringify({ isCompleted }),
       });
 
       if (res.ok) {
@@ -165,10 +165,12 @@ export default function Card({
                       {task.isCompleted ? "Completed" : "Incomplete"}
                     </button>
                     <div className="flex items-center gap-4">
-                      <MdEditDocument
-                        size={20}
-                        className="text-gray-400 cursor-pointer"
-                      />
+                      <Link href={`/formedit/${task.id}`}>
+                        <MdEditDocument
+                          size={20}
+                          className="text-gray-400 cursor-pointer"
+                        />
+                      </Link>
                       <FaTrash
                         size={20}
                         className="text-gray-400 cursor-pointer hover:text-red-500"
