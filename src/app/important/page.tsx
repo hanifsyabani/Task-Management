@@ -10,6 +10,7 @@ interface Task {
   description: string;
   date: string;
   isCompleted: boolean;
+  isImportant: boolean;
 }
 
 export default function Important() {
@@ -37,7 +38,7 @@ export default function Important() {
   }
   return (
     <div>
-      <Header title="Important" />
+      <Header title="Important" api="important" />
       <Card tasks={importantTasks} loadings={loading} />
     </div>
   );

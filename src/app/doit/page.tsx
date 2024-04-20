@@ -10,6 +10,7 @@ interface Task {
   description: string;
   date: string;
   isCompleted: boolean;
+  isImportant: boolean;
 }
 
 export default function Doit() {
@@ -39,7 +40,7 @@ export default function Doit() {
 
   return (
     <div >
-      <Header title="Do it Task"  />
+      <Header title="Do it Task" api="doit"  />
       <Card tasks={doItTasks} loadings ={loading}  />
     </div>
   );

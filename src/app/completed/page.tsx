@@ -9,6 +9,7 @@ interface Task {
   description: string;
   date: string;
   isCompleted: boolean;
+  isImportant: boolean;
 }
 export default function Completed() {
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
@@ -36,7 +37,7 @@ export default function Completed() {
   
   return (
     <div >
-      <Header title="Completed" />
+      <Header title="Completed" api="completed" />
       <Card tasks={completedTasks} loadings ={loading}/>
     </div>
   );

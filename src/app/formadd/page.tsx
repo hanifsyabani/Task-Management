@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import { ChangeEvent, useState } from "react";
 import { useToast, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
 export default function FormAdd() {
   const [tasks, setTasks] = useState({});
@@ -46,12 +47,14 @@ export default function FormAdd() {
       } else {
         toast({
           title: "Task failed to create.",
+          description:"Please check your task and try again.",
           status: "error",
           duration: 9000,
           isClosable: true,
           position: "top-right",
           variant: "top-accent",
         });
+        setLoading(false);
         throw new Error(data.error);
       }
       setTasks({});
@@ -63,12 +66,13 @@ export default function FormAdd() {
   }
 
   return (
-    <div className="  p-4 ">
+    <div className="p-4">
       <div className="flex justify-between">
         <h1 className="text-white font-semibold text-lg">Create Task</h1>
-        <IoMdClose
+        <MdOutlineKeyboardBackspace
           size={25}
-          className="text-red-500 cursor-pointer"
+          className="text-white cursor-pointer"
+          onClick={() => router.back()}
         />
       </div>
       <form className="mt-7" onSubmit={handleSubmit}>

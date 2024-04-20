@@ -10,6 +10,7 @@ interface Task {
   description: string;
   date: string;
   isCompleted: boolean;
+  isImportant: boolean;
 }
 
 export default function Home() {
@@ -38,7 +39,7 @@ export default function Home() {
 
   return (
     <div>
-      <Header title="All Tasks" />
+      <Header title="All Tasks" api="task" />
       <Card tasks={tasks} loadings ={loading} />
     </div>
   );

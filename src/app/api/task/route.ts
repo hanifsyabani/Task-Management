@@ -71,7 +71,7 @@ export async function GET() {
 export async function DELETE() {
   try {
     await prisma.task.deleteMany();
-    return NextResponse.json({ message: "All tasks deleted" }, { status: 200 });
+    return NextResponse.json({ message: "Task Deleted" });
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 500 });
