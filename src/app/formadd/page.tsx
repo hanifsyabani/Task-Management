@@ -65,7 +65,7 @@ export default function FormAdd() {
   }
 
   return (
-    <div className="p-4">
+    <div className="lg:p-4">
       <div className="flex justify-between">
         <h1 className="text-white font-semibold text-lg">Create Task</h1>
         <MdOutlineKeyboardBackspace
@@ -74,7 +74,7 @@ export default function FormAdd() {
           onClick={() => router.back()}
         />
       </div>
-      <form className="mt-7" onSubmit={handleSubmit}>
+      <form className="lg:mt-7 mt-14" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="title"
@@ -138,8 +138,8 @@ export default function FormAdd() {
           />
         </div>
 
-        <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-36 text-white font-semibold mt-5 hover:bg-purple-800 transition-all mx-auto ">
-          <FaPlus size={15} className="text-white cursor-pointer" />
+        <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-36 text-white font-semibold mt-5 hover:bg-purple-800 transition-all mx-auto cursor-pointer ">
+          <FaPlus size={15} className="text-white" />
           <button type="submit">{loading ? <Spinner /> : "Create Task"}</button>
         </div>
       </form>

@@ -59,12 +59,14 @@ export default function FormEdit() {
     const { name, value, type } = e.target;
     const inputValue =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+      
     setTask((old) => ({ ...old, [name]: inputValue }));
   };
 
   async function handleSubmit(e: any) {
     e.preventDefault();
     const taskId = params.id;
+    setLoading(true);
     try {
       const res = await fetch(`/api/task/${taskId}`, {
         method: "PUT",
@@ -97,6 +99,7 @@ export default function FormEdit() {
         setLoading(false);
         throw new Error("Failed to update task");
       }
+      setLoading(true);
     } catch (error) {
       console.log(error);
     }
@@ -168,6 +171,7 @@ export default function FormEdit() {
             id="completed"
             onChange={handleInput}
             value={task?.isCompleted ? "true" : "false"}
+            checked={task?.isCompleted}
           />
         </div>
         <div className="flex justify-between">
@@ -178,11 +182,12 @@ export default function FormEdit() {
             id="important"
             onChange={handleInput}
             value={task?.isImportant ? "true" : "false"}
+            checked={task?.isImportant}
           />
         </div>
 
-        <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-44 text-white font-semibold mt-5 hover:bg-purple-800 transition-all mx-auto ">
-          <FaPlus size={15} className="text-white cursor-pointer" />
+        <div className="flex items-center justify-center gap-4 bg-purple-600 py-2 px-3 text-sm rounded-lg w-44 text-white font-semibold mt-5 hover:bg-purple-800 cursor-pointer transition-all mx-auto ">
+          <FaPlus size={15} className="text-white" />
           <button type="submit">{loading ? <Spinner /> : "Update Task"}</button>
         </div>
       </form>

@@ -12,6 +12,7 @@ import {
   AlertDialogOverlay,
   Button,
   Spinner,
+  Tooltip,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -82,6 +83,7 @@ export default function Card({
     const confirm = window.confirm(
       "Are you sure you want to complete this task?"
     );
+    
     if (!confirm) return;
 
     try {
@@ -125,7 +127,7 @@ export default function Card({
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-6 mt-10 px-7">
+      <div className="grid lg:grid-cols-3 grid-cols-1  gap-6 mt-10 px-7">
         {loadings ? (
           <div className="absolute top-1/2 left-[60%] transform -translate-x-1/2 -translate-y-1/2">
             <Spinner color="white" size={"xl"} />
@@ -168,7 +170,7 @@ export default function Card({
                       <Link href={`/formedit/${task.id}`}>
                         <MdEditDocument
                           size={20}
-                          className="text-gray-400 cursor-pointer"
+                          className="text-gray-400 cursor-pointer hover:text-white"
                         />
                       </Link>
                       <FaTrash

@@ -2,6 +2,7 @@
 
 import Card from "@/Components/Card/Card";
 import Header from "@/Components/Header/Header";
+import { useFetch } from "@/hooks/useFetch";
 import { useEffect, useState } from "react";
 
 interface Task {
@@ -24,13 +25,8 @@ export default function Home() {
   async function fetchTasks() {
     setLoading(true);
     try {
-      const response = await fetch("/api/task");
-      if (response.ok) {
-        const data = await response.json();
-        setTasks(data.task);
-      } else {
-        throw new Error("Failed to fetch tasks");
-      }
+      const response = await useFetch("/api/task");
+      setTasks(response.task);
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +36,7 @@ export default function Home() {
   return (
     <div>
       <Header title="All Tasks" api="task" />
-      <Card tasks={tasks} loadings ={loading} />
+      <Card tasks={tasks} loadings={loading} />
     </div>
   );
 }

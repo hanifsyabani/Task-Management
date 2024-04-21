@@ -1,6 +1,7 @@
 'use client'
 import Card from "@/Components/Card/Card";
 import Header from "@/Components/Header/Header";
+import { useFetch } from "@/hooks/useFetch";
 import { useEffect, useState } from "react";
 
 interface Task {
@@ -22,23 +23,18 @@ export default function Completed() {
   async function fetchCompletedTasks() {
     setLoading(true);
     try {
-      const response = await fetch("/api/task");
-      if (response.ok) {
-        const data = await response.json();
-        setCompletedTasks(data.completed);
-      } else {
-        throw new Error("Failed to fetch tasks");
-      }
+      const response = await useFetch("/api/task");
+      setCompletedTasks(response.completed);
     } catch (error) {
       console.log(error);
     }
     setLoading(false);
   }
-  
+
   return (
-    <div >
+    <div>
       <Header title="Completed" api="completed" />
-      <Card tasks={completedTasks} loadings ={loading}/>
+      <Card tasks={completedTasks} loadings={loading} />
     </div>
   );
 }

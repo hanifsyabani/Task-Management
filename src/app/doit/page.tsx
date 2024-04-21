@@ -2,6 +2,7 @@
 
 import Card from "@/Components/Card/Card";
 import Header from "@/Components/Header/Header";
+import { useFetch } from "@/hooks/useFetch";
 import { useEffect, useState } from "react";
 
 interface Task {
@@ -14,7 +15,6 @@ interface Task {
 }
 
 export default function Doit() {
-
   const [doItTasks, setDoItTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -25,13 +25,8 @@ export default function Doit() {
   async function fetchDoItTasks() {
     setLoading(true);
     try {
-      const response = await fetch("/api/task");
-      if (response.ok) {
-        const data = await response.json();
-        setDoItTasks(data.doit);
-      } else {
-        throw new Error("Failed to fetch tasks");
-      }
+      const response = await useFetch("/api/task");
+      setDoItTasks(response.doit);
     } catch (error) {
       console.log(error);
     }
@@ -39,9 +34,9 @@ export default function Doit() {
   }
 
   return (
-    <div >
-      <Header title="Do it Task" api="doit"  />
-      <Card tasks={doItTasks} loadings ={loading}  />
+    <div>
+      <Header title="Do it Task" api="doit" />
+      <Card tasks={doItTasks} loadings={loading} />
     </div>
   );
 }
