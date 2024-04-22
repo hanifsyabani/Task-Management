@@ -135,12 +135,11 @@ export default function Card({
         ) : (
           <>
             {tasks.map((task) => (
-              <>
+              <div key={task.id}>
                 <div
                   className={`w-72 bg-secondary p-3 rounded-lg border  h-56 ${
                     task.isImportant ? "border-red-600" : "border-gray-500"
                   }`}
-                  key={task.id}
                 >
                   <h1 className="text-white text-xl font-semibold">
                     {task.title}
@@ -211,7 +210,7 @@ export default function Card({
                     </AlertDialogContent>
                   </AlertDialogOverlay>
                 </AlertDialog>
-              </>
+              </div>
             ))}
 
             <AddCardTask />
