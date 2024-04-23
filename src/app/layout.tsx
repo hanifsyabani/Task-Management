@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/Components/Sidebar/Sidebar";
-import { Providers } from "./provider";
 import NextTopLoader from "nextjs-toploader";
+import DarkModeProvider from "@/context/Darkmode";
+import Layout from "@/Components/Layout/Layouts";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -21,16 +21,13 @@ export default function RootLayout({
     <html lang="en">
       <link rel="icon" href="/next.svg" />
       <body className={montserrat.className}>
-        <h1 className="text-white bg-primary font-bold text-2xl p-3 lg:hidden">
-          Remind<span className="text-green-500">ME</span>
-        </h1>
-        <div className="bg-primary px-2 py-6 w-full lg:flex h-full min-h-screen">
-          <NextTopLoader color="#ffffff" />
-          <Sidebar />
-          <main className="lg:ml-[20%] bg-tertiary p-4 rounded-xl border border-gray-600 w-full">
-            <Providers>{children}</Providers>
-          </main>
-        </div>
+        <NextTopLoader color="#ffffff" />
+        <DarkModeProvider>
+          <h1 className="text-white bg-primary font-bold text-2xl p-3 lg:hidden">
+            Remind<span className="text-green-500">ME</span>
+          </h1>
+          <Layout children={children} />
+        </DarkModeProvider>
       </body>
     </html>
   );

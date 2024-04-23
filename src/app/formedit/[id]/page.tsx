@@ -1,8 +1,9 @@
 "use client";
 
+import { Darkmode } from "@/context/Darkmode";
 import { Spinner, useToast } from "@chakra-ui/react";
 import { useParams, useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 
@@ -21,6 +22,7 @@ export default function FormEdit() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const params = useParams();
+  const { darkMode, setDarkMode } = useContext(Darkmode);
 
   useEffect(() => {
     async function fetchTaskByid() {
@@ -59,7 +61,7 @@ export default function FormEdit() {
     const { name, value, type } = e.target;
     const inputValue =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-      
+
     setTask((old) => ({ ...old, [name]: inputValue }));
   };
 
@@ -108,10 +110,18 @@ export default function FormEdit() {
   return (
     <div className="p-4">
       <div className="flex justify-between">
-        <h1 className="text-white font-semibold text-lg">Edit Task</h1>
+        <h1
+          className={`${
+            darkMode ? "text-white" : "text-green-500"
+          } font-semibold text-lg`}
+        >
+          Create Task
+        </h1>
         <MdOutlineKeyboardBackspace
           size={25}
-          className="text-white cursor-pointer"
+          className={`${
+            darkMode ? "bg-transparent" : "bg-green-500"
+          } rounded-full text-white cursor-pointer`}
           onClick={() => router.back()}
         />
       </div>

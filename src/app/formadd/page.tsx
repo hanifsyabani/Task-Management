@@ -1,16 +1,18 @@
 'use client'
 
 import { FaPlus } from "react-icons/fa";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { useToast, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { Darkmode } from "@/context/Darkmode";
 
 export default function FormAdd() {
   const [tasks, setTasks] = useState({});
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { darkMode, setDarkMode } = useContext(Darkmode);
 
   const handleInput = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -46,7 +48,7 @@ export default function FormAdd() {
       } else {
         toast({
           title: "Task failed to create.",
-          description:"Please check your task and try again.",
+          description: "Please check your task and try again.",
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -58,7 +60,7 @@ export default function FormAdd() {
       }
       setTasks({});
       setLoading(false);
-      router.push('/');
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -67,10 +69,16 @@ export default function FormAdd() {
   return (
     <div className="lg:p-4">
       <div className="flex justify-between">
-        <h1 className="text-white font-semibold text-lg">Create Task</h1>
+        <h1
+          className={`${
+            darkMode ? "text-white" : "text-green-500"
+          } font-semibold text-lg`}
+        >
+          Create Task
+        </h1>
         <MdOutlineKeyboardBackspace
           size={25}
-          className="text-white cursor-pointer"
+          className={`${darkMode ? "bg-transparent":"bg-green-500"} rounded-full text-white cursor-pointer`}
           onClick={() => router.back()}
         />
       </div>
@@ -78,7 +86,9 @@ export default function FormAdd() {
         <div className="mb-4">
           <label
             htmlFor="title"
-            className="block text-white text-semibold mb-3"
+            className={`block ${
+              darkMode ? "text-white" : "text-tertiary"
+            } text-semibold mb-3`}
           >
             Title
           </label>
@@ -88,13 +98,17 @@ export default function FormAdd() {
             id="title"
             placeholder="e.g Buy groceries"
             onChange={handleInput}
-            className="text-sm bg-primary px-2 py-3 rounded-md w-full outline-none text-gray-200"
+            className={`text-sm ${
+              darkMode ? "bg-primary text-gray-200 " : "bg-white text-black border border-gray-300"
+            } px-2 py-3 rounded-md w-full outline-none `}
           />
         </div>
         <div className="mb-4">
           <label
             htmlFor="description"
-            className="block text-white text-semibold mb-3"
+            className={`block ${
+              darkMode ? "text-white" : "text-tertiary"
+            } text-semibold mb-3`}
           >
             Description
           </label>
@@ -103,11 +117,18 @@ export default function FormAdd() {
             id="description"
             onChange={handleInput}
             placeholder="e.g Buy grocires from the market"
-            className="text-sm bg-primary px-2 py-3 rounded-md w-full outline-none text-gray-200 h-24"
+            className={`text-sm ${
+              darkMode ? "bg-primary text-gray-200" : "bg-white text-black border border-gray-300"
+            } px-2 py-3 rounded-md w-full outline-none h-24`}
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="date" className="block text-white text-semibold mb-3">
+          <label
+            htmlFor="date"
+            className={`block ${
+              darkMode ? "text-white" : "text-tertiary"
+            } text-semibold mb-3`}
+          >
             Date
           </label>
           <input
@@ -116,11 +137,15 @@ export default function FormAdd() {
             id="date"
             onChange={handleInput}
             placeholder="e.g Buy groceries"
-            className="text-sm bg-primary px-2 py-3 rounded-md w-full outline-none text-gray-200"
+            className={`text-sm ${
+              darkMode ? "bg-primary text-gray-200" : "bg-white text-black border border-gray-300"
+            } px-2 py-3 rounded-md w-full outline-none `}
           />
         </div>
         <div className="flex justify-between my-4">
-          <p className="text-gray-200 text-sm">Completed</p>
+          <p className={`${darkMode ? "text-gray-200" : "text-black"} text-sm`}>
+            Completed
+          </p>
           <input
             type="checkbox"
             name="completed"
@@ -129,7 +154,9 @@ export default function FormAdd() {
           />
         </div>
         <div className="flex justify-between">
-          <p className="text-gray-200 text-sm">Important!</p>
+          <p className={`${darkMode ? "text-gray-200" : "text-black"} text-sm`}>
+            Important!
+          </p>
           <input
             type="checkbox"
             name="important"

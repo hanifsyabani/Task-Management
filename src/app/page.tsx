@@ -2,7 +2,7 @@
 
 import Card from "@/Components/Card/Card";
 import Header from "@/Components/Header/Header";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 
 interface Task {
   id: number;
@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div >
       <Header title="All Tasks" api="task" />
       <Card tasks={tasks} loadings={loading} />
     </div>

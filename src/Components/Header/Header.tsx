@@ -1,3 +1,4 @@
+import { Darkmode } from "@/context/Darkmode";
 import {
   Button,
   Modal,
@@ -11,12 +12,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useContext } from "react";
 import { FaCirclePlus } from "react-icons/fa6";
-import { MdOutlineDelete } from "react-icons/md";
+import { MdOutlineDelete, MdOutlineDarkMode } from "react-icons/md";
 
-export default function Header({ title, api }: { title: string, api: string }) {
+export default function Header({ title, api }: { title: string; api: string }) {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { darkMode, setDarkMode } = useContext(Darkmode);
 
   async function handleDelete() {
     try {
@@ -41,7 +44,6 @@ export default function Header({ title, api }: { title: string, api: string }) {
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-        
       } else {
         toast({
           title: "Failed to delete task.",
@@ -63,21 +65,41 @@ export default function Header({ title, api }: { title: string, api: string }) {
     <>
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-white font-bold text-xl">{title}</h1>
+          <h1
+            className={`${
+              darkMode ? "text-white" : "text-green-500"
+            } font-bold text-xl`}
+          >
+            {title}
+          </h1>
           <hr className="w-10 " />
         </div>
         <div className="flex items-center gap-3">
           <Link href={"/formadd"}>
-            <FaCirclePlus size={30} className="text-white cursor-pointer" />
+            <FaCirclePlus
+              size={30}
+              className={`${
+                darkMode ? "text-white" : "text-green-500"
+              } cursor-pointer`}
+            />
           </Link>
           <MdOutlineDelete
             size={30}
-            className="text-white cursor-pointer"
+            className={`${
+              darkMode ? "text-white" : "text-green-500"
+            } cursor-pointer`}
             onClick={onOpen}
+          />
+          <MdOutlineDarkMode
+            size={30}
+            className={`${
+              darkMode ? "text-white" : "text-green-500"
+            } cursor-pointer`}
+            onClick={() => setDarkMode(!darkMode)}
           />
         </div>
       </div>
-      
+
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
