@@ -26,7 +26,9 @@ export default function RootLayout({
           <h1 className="text-white bg-primary font-bold text-2xl p-3 lg:hidden">
             Remind<span className="text-green-500">ME</span>
           </h1>
-          <Layout children={children} />
+          <Layout>
+            {children}
+          </Layout>
         </DarkModeProvider>
       </body>
     </html>
